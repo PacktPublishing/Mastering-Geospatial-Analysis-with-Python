@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>Arena Map</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"  crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	
+</head>
+<body>
+<div id="map" style="width: 600px; height: 400px;"></div>
+<script>
+	var themap = L.map('map').setView([ {{form.latitude.data}},{{form.longitude.data}}], 13);
+	L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 1,
+	maxZoom: 18,
+	ext: 'png'
+	}).addTo(themap);
+	marker = L.marker([  {{form.latitude.data}},{{form.longitude.data}}]).addTo(themap)
+		.bindPopup("Click to locate the new arena").openPopup();
+	var popup = L.popup();
+	function showMapClick(e) {
+		$('#longitude').val(e.latlng.lng);
+		$('#latitude').val(e.latlng.lat);
+		marker
+			.setLatLng(e.latlng)
+			.bindPopup("You added a new arena at " + e.latlng.toString())
+			.openPopup();
+	}
+	themap.on('click', showMapClick);
+
+</script>
+	<form method="post" class="form">
+
+		<br>
+		Name: {{form.name}}<br>
+		Longitude: {{ form.longitude(class_ = 'form-control first-input last-input',  placeholder = form.longitude.data, ) }}
+ <br>
+		Latitude: {{ form.latitude(class_ = 'form-control first-input last-input',  placeholder = form.latitude.data, ) }}<br>
+		<input type="submit" value="Add Arena">
+
+	</form>
+
+</body>
+</html>

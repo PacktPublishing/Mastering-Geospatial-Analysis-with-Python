@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>Arena Map</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+
+
+	
+</head>
+<body>
+
+
+
+<div id="map" style="width: 600px; height: 400px;"></div>
+<script>
+
+	var themap = L.map('map').setView([ {{form.latitude}},{{form.longitude}}], 13);
+
+	L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 1,
+	maxZoom: 18,
+	ext: 'png'
+	}).addTo(themap);
+
+	L.marker([ {{form.latitude}},{{form.longitude}}]).addTo(themap)
+		.bindPopup("{{form.popup}}").openPopup();
+
+	var popup = L.popup();
+
+
+	function showMapClick(e) {
+		popup
+			.setLatLng(e.latlng)
+			.setContent("You clicked the map at " + e.latlng.toString())
+			.openOn(themap);
+	}
+
+	themap.on('click', showMapClick);
+
+	
+
+</script>
+	<form method="post" class="form">
+		<h3>{{form.description}}</h3>
+		{{form.selections(class_='form-control',placeholder="")}}
+		<br>
+		<input type="submit" value="Find Data">
+
+	</form>
+
+</body>
+</html>
